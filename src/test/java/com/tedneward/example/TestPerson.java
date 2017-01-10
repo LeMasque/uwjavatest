@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TestPerson {
+
   @Test
   public void exerciseTheBasics() {
     Person p = new Person();
@@ -20,19 +21,19 @@ public class TestPerson {
     assertEquals("The Honorable Fird Birfle", p.becomeJudge());
     assertEquals(30, p.timeWarp());
   }
-  
+
   @Test(expected=IllegalArgumentException.class)
   public void setAgeToBeNegative() {
     Person p = new Person();
     p.setAge(-20);
   }
-  
+
   @Test(expected=IllegalArgumentException.class)
   public void setNameToNull() {
     Person p = new Person();
     p.setName(null);
   }
-  
+
   @Test
   public void viewReadabletoString() {
     Person p = new Person();
@@ -42,9 +43,9 @@ public class TestPerson {
     
     assertEquals("[Person name:Fird Birfle age:20 salary:195750.22]", p.toString());
   }
-  
+
   @Test
-  public void exercisePesonEquals() {
+  public void exercisePersonEquals() { // changed from Peson to Person
     Person p1 = new Person("Ted", 43, 250000);
     Person p2 = p1;
     assertEquals(p1, p2);
@@ -86,7 +87,15 @@ public class TestPerson {
     assertEquals(new Person("Michael", 22, 10000), people.get(2));
     assertEquals(new Person("Matthew", 15, 0), people.get(3));
   }
-  
+
+  private class SSNListener implements PropertyChangeListener {
+    public void propertyChange(PropertyChangeEvent pce) {
+      assertEquals("ssn", pce.getPropertyName());
+      assertEquals("", pce.getOldValue());
+      assertEquals("012-34-5678", pce.getNewValue());
+    }
+  }
+
   @Test
   public void catchPropertyChange() {
     Person ted = new Person("Ted", 43, 250000);
@@ -95,11 +104,11 @@ public class TestPerson {
     // Call addPropertyChangeListener with a PropertyChangedListener
     // that has the following code in it:
     /*
-    assertEquals("ssn", pce.getPropertyName());
-    assertEquals("", pce.getOldValue());
-    assertEquals("012-34-5678", pce.getNewValue());
+      assertEquals("ssn", pce.getPropertyName());
+      assertEquals("", pce.getOldValue());
+      assertEquals("012-34-5678", pce.getNewValue());
     */
-
+    ted.addPropertyChangeListener(new SSNListener());
     // ============ YOUR CHANGES END HERE
     
     assertEquals(false, ted.getPropertyChangeFired());
